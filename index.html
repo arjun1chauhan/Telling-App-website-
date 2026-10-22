@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Telling: Confess & Chat</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f3eeff;--bg2:#e6dcff;--surface:#fff;--ink:#1d1230;--muted:#5f527a;--line:#d6c9f3;--accent:#7c4dff;--accent-ink:#fff;--peach:#ff7a59;--mint:#16a37f;--glow:.35;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e0818;--bg2:#1a1030;--surface:#1c1230;--ink:#f6f1ff;--muted:#b9acd6;--line:#34244f;--accent:#a98bff;--accent-ink:#120a20;--peach:#ff9d82;--mint:#5eead4;--glow:.55}}
+:root[data-theme="dark"]{--bg:#0e0818;--bg2:#1a1030;--surface:#1c1230;--ink:#f6f1ff;--muted:#b9acd6;--line:#34244f;--accent:#a98bff;--accent-ink:#120a20;--peach:#ff9d82;--mint:#5eead4;--glow:.55}
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.6 "DM Sans",system-ui,sans-serif;overflow-x:hidden}
+h1,h2,h3{font-family:"Bricolage Grotesque","DM Sans",system-ui,sans-serif;line-height:1.05;margin:0;letter-spacing:-.025em}
+:focus-visible{outline:3px solid var(--peach);outline-offset:3px}
+.wrap{max-width:1120px;margin:0 auto;padding:0 22px;position:relative}
+.btn{display:inline-block;background:linear-gradient(135deg,var(--accent),var(--peach));color:#fff;border:0;border-radius:999px;padding:14px 26px;font:700 16px "DM Sans",sans-serif;text-decoration:none;cursor:pointer;box-shadow:0 10px 30px -10px var(--accent);transition:transform .2s}
+.btn:hover{transform:translateY(-2px) scale(1.03)}
+.btn.ghost{background:transparent;color:var(--ink);box-shadow:none;border:2px solid var(--line)}
+nav{display:flex;justify-content:space-between;align-items:center;padding:18px 0;position:relative;z-index:2}
+.logo{font:800 26px "Bricolage Grotesque",sans-serif;text-decoration:none;color:var(--ink)}
+.logo i{color:var(--peach);font-style:normal}
+/* hero */
+.hero-bg{position:relative;overflow:hidden;background:radial-gradient(120% 80% at 50% 0,var(--bg2),var(--bg))}
+.blob{position:absolute;border-radius:50%;filter:blur(70px);opacity:var(--glow);animation:drift 14s ease-in-out infinite alternate}
+.b1{width:420px;height:420px;background:var(--accent);top:-80px;left:-100px}
+.b2{width:360px;height:360px;background:var(--peach);right:-80px;top:120px;animation-delay:-5s}
+.b3{width:300px;height:300px;background:var(--mint);bottom:-100px;left:38%;animation-delay:-9s}
+@keyframes drift{to{transform:translate(60px,40px) scale(1.15)}}
+.hero{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center;padding:30px 0 80px;position:relative;z-index:1}
+.hero h1{font-size:clamp(44px,8vw,84px);font-weight:800}
+.hero h1 em{font-style:normal;background:linear-gradient(90deg,var(--accent),var(--peach));-webkit-background-clip:text;background-clip:text;color:transparent}
+.typed{margin:24px 0 28px;background:var(--surface);border:1px solid var(--line);border-radius:18px 18px 18px 4px;padding:16px 18px;max-width:30em;min-height:96px;box-shadow:0 20px 40px -25px #000}
+.typed q{display:block;font-size:18px;quotes:none;min-height:54px}
+.typed q::after{content:"|";animation:blink 1s steps(1) infinite;color:var(--peach)}
+.typed small{color:var(--muted);font-size:14px}
+@keyframes blink{50%{opacity:0}}
+.row{display:flex;gap:12px;flex-wrap:wrap}
+.hint{font-size:14px;color:var(--muted);margin-top:16px}
+/* phone */
+.stage{perspective:900px}
+.phone{width:310px;max-width:100%;height:580px;margin:0 auto;background:#0f0a18;color:#f3eeff;border-radius:38px;padding:14px;border:7px solid #2d1f47;display:flex;flex-direction:column;box-shadow:0 40px 80px -30px #000,0 0 90px -20px var(--accent);transition:transform .15s}
+.screen{flex:1;overflow-y:auto;padding:4px 2px}
+.tabs{display:flex;gap:6px;background:#2a1d40;border-radius:999px;padding:4px;margin-bottom:10px}
+.tabs button{flex:1;border:0;background:transparent;color:#f3eeff;border-radius:999px;padding:8px 0;font:500 13px "DM Sans",sans-serif;cursor:pointer}
+.tabs button[aria-selected="true"]{background:linear-gradient(135deg,#a98bff,#ff9d82);color:#120a20;font-weight:700}
+.slip{background:#2a1d40;border-radius:14px;padding:12px;margin-bottom:10px;font-size:14px;line-height:1.45}
+.slip small{display:block;color:#b9acd6;margin-bottom:4px}
+.slip button{background:none;border:0;color:#ff9d82;cursor:pointer;font:700 13px "DM Sans",sans-serif;padding:6px 0 0}
+.slip.new{animation:pop .4s ease}@keyframes pop{from{transform:scale(.9);opacity:0}}
+textarea,input[type=text]{width:100%;background:#2a1d40;color:#f3eeff;border:1px solid #4a3a6b;border-radius:12px;padding:10px;font:14px "DM Sans",sans-serif}
+textarea{resize:none;height:70px}
+.pbtn{background:#ff9d82;color:#241838;border:0;border-radius:999px;padding:9px 16px;font:700 13px "DM Sans",sans-serif;cursor:pointer;margin:8px 0 12px}
+.room{width:100%;text-align:left;background:#2a1d40;color:#f3eeff;border:0;border-radius:14px;padding:12px;margin-bottom:8px;cursor:pointer;font:500 14px "DM Sans",sans-serif;display:flex;justify-content:space-between}
+.room span{color:#5eead4;font-size:12px}
+.msg{font-size:14px;margin:0 0 8px;display:flex;gap:6px;align-items:baseline;flex-wrap:wrap}
+.msg b{color:#5eead4}.msg.me b{color:#ff9d82}
+.kick{margin-left:auto;background:none;border:1px solid #a98bff;color:#f3eeff;border-radius:999px;font-size:11px;padding:2px 9px;cursor:pointer}
+.back{background:none;border:0;color:#ff9d82;cursor:pointer;font:700 13px "DM Sans",sans-serif;padding:0 0 8px}
+.chatbar{display:flex;gap:6px;margin-top:8px}
+.note{font-size:12px;color:#b9acd6;margin:6px 0}
+.who{display:flex;justify-content:space-between;align-items:center;background:#2a1d40;border-radius:14px;padding:10px 12px;margin-bottom:8px;font-size:14px}
+.who small{color:#b9acd6}
+.who button{border:1px solid #ff9d82;background:transparent;color:#ff9d82;border-radius:999px;padding:5px 14px;font:700 12px "DM Sans",sans-serif;cursor:pointer}
+.who button[aria-pressed="true"]{background:#ff9d82;color:#241838}
+/* marquee */
+.marq{overflow:hidden;padding:18px 0;border-block:1px solid var(--line);background:var(--bg2)}
+.track{display:flex;gap:14px;width:max-content;animation:scroll 50s linear infinite}
+.track.rev{animation-direction:reverse;margin-top:14px}
+.chip{background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:10px 20px;white-space:nowrap;font-size:15px}
+@keyframes scroll{to{transform:translateX(-50%)}}
+/* sections */
+section{padding:84px 0}
+section h2{font-size:clamp(34px,6vw,58px);font-weight:800;margin-bottom:14px}
+.lead{color:var(--muted);max-width:34em;margin:0 0 36px;font-size:19px}
+.bento{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.tile{text-align:left;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:24px;padding:22px;cursor:pointer;font:inherit;transition:transform .2s,border-color .2s,background .2s;display:flex;flex-direction:column;gap:6px}
+.tile:hover{transform:translateY(-4px);border-color:var(--accent)}
+.tile .ic{font-size:34px;line-height:1}
+.tile h3{font-size:21px}
+.tile p{margin:0;color:var(--muted);font-size:15px}
+.tile .more{display:none;color:var(--ink);font-size:14px;border-top:1px dashed var(--line);padding-top:8px;margin-top:4px}
+.tile[aria-expanded="true"]{background:linear-gradient(160deg,var(--accent),var(--peach));border-color:transparent;color:#fff}
+.tile[aria-expanded="true"] p,.tile[aria-expanded="true"] .more{color:#fff}
+.tile[aria-expanded="true"] .more{display:block}
+.w2{grid-column:span 2}
+/* reveal */
+.reveal{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:26px;padding:28px;box-shadow:0 30px 60px -40px var(--accent)}
+.card q{display:block;font:600 24px/1.25 "Bricolage Grotesque",sans-serif;quotes:none;margin-bottom:18px}
+.who2{display:flex;align-items:center;gap:12px;width:100%;background:var(--bg2);border:1px dashed var(--line);border-radius:16px;padding:12px 16px;cursor:pointer;color:var(--ink);font:500 16px "DM Sans",sans-serif}
+.who2 .av{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--peach));display:grid;place-items:center;font-weight:800;color:#fff}
+.benefits{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.ben{background:var(--surface);border:1px solid var(--line);border-radius:26px;padding:28px}
+.ben .ic{font-size:40px}
+.ben h3{font-size:26px;margin:10px 0 8px}
+.ben p{margin:0;color:var(--muted)}
+.steps{counter-reset:s;display:grid;grid-template-columns:repeat(4,1fr);gap:18px;padding:0;list-style:none;margin:0}
+.steps li{counter-increment:s;font-weight:700;font-size:19px;background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:20px}
+.steps li::before{content:counter(s);display:grid;place-items:center;width:42px;height:42px;border-radius:50%;background:var(--accent);color:var(--accent-ink);font:800 20px "Bricolage Grotesque",sans-serif;margin-bottom:12px}
+.steps span{display:block;color:var(--muted);font-weight:400;font-size:15px}
+.cta{text-align:center;border-radius:36px;padding:64px 24px;background:radial-gradient(90% 120% at 50% 0,var(--accent),transparent),var(--bg2);border:1px solid var(--line)}
+.cta .lead{margin-left:auto;margin-right:auto}
+footer{padding:30px 0 50px;color:var(--muted);font-size:14px;text-align:center}
+@media (max-width:860px){.hero,.reveal{grid-template-columns:1fr}.bento{grid-template-columns:1fr 1fr}.benefits,.steps{grid-template-columns:1fr 1fr}}
+@media (max-width:520px){.bento,.benefits,.steps{grid-template-columns:1fr}.w2{grid-column:auto}section{padding:56px 0}}
+@media (prefers-reduced-motion:reduce){.blob,.track{animation:none}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<div class="hero-bg"><span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span>
+<div class="wrap">
+<nav><a class="logo" href="#top">Tell<i>ing</i></a><a class="btn" href="https://play.google.com/store/apps/details?id=com.telling.social">Get the app</a></nav>
+<header class="hero" id="top">
+<div>
+<h1>Confess it. Chat it. <em>Nobody knows it’s you.</em></h1>
+<div class="typed" aria-live="off"><q id="typed"></q><small>Anonymous · just now</small></div>
+<div class="row"><a class="btn" href="https://play.google.com/store/apps/details?id=com.telling.social">Install on Android</a><a class="btn ghost" href="#features">See what’s inside</a></div>
+<p class="hint">The phone is live. Post a confession, join a room, follow someone.</p>
+</div>
+<div class="stage" id="stage">
+<div class="phone" id="phone" aria-label="Interactive Telling app demo">
+<div class="tabs" role="tablist"><button role="tab" aria-selected="true" data-t="c">Confess</button><button role="tab" aria-selected="false" data-t="r">Rooms</button><button role="tab" aria-selected="false" data-t="f">Friends</button></div>
+<div class="screen" id="screen"></div>
+</div>
+</div>
+</header>
+</div></div>
+
+<div class="marq" aria-hidden="true"><div class="track" id="t1"></div><div class="track rev" id="t2"></div></div>
+
+<div class="wrap">
+<section id="features">
+<h2>Ten reasons to open it tonight</h2>
+<p class="lead">Tap any tile to see how it works.</p>
+<div class="bento" id="bento"></div>
+</section>
+
+<section>
+<div class="reveal">
+<div><h2>Say it. Skip the name.</h2><p class="lead">Every confession on Telling is posted anonymously. Try it: tap below to see who wrote this one.</p></div>
+<div class="card"><q>“I act confident at work, but I rehearse every meeting in the shower.”</q>
+<button class="who2" id="who2" aria-live="polite"><span class="av">?</span><span>Tap to reveal the author</span></button></div>
+</div>
+</section>
+
+<section>
+<h2>What you get</h2>
+<p class="lead">A place to be honest, find company, and make friends.</p>
+<div class="benefits">
+<div class="ben"><div class="ic">🫣</div><h3>Honest, no risk</h3><p>No profile to defend. Share a thought and see who relates.</p></div>
+<div class="ben"><div class="ic">🌙</div><h3>Company at 2 a.m.</h3><p>Public rooms are always open, so someone is around when you are.</p></div>
+<div class="ben"><div class="ic">🤝</div><h3>Strangers to friends</h3><p>Follow people you click with and keep talking beyond one room.</p></div>
+</div>
+</section>
+
+<section>
+<h2>Start in four taps</h2><p class="lead">No setup maze. Just open and go.</p>
+<ol class="steps">
+<li>Open the app<span>A simple, fast interface.</span></li>
+<li>Post or browse<span>Share a confession or read others.</span></li>
+<li>Join a room<span>Chat live with people online.</span></li>
+<li>Follow friends<span>Stay in touch with favorites.</span></li>
+</ol>
+</section>
+
+<section class="cta">
+<h2>Your turn to tell.</h2>
+<p class="lead">Free on Google Play. More features are coming soon.</p>
+<a class="btn" href="https://play.google.com/store/apps/details?id=com.telling.social">Get Telling</a>
+</section>
+<footer>Telling: Confess & Chat by Nikola Studios. Contains ads. Rated Teen.</footer>
+</div>
+
+<script>
+var $=function(s){return document.querySelector(s)};
+function el(t,c,x){var e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e}
+var reduce=matchMedia("(prefers-reduced-motion:reduce)").matches;
+
+/* typewriter */
+var lines=["I still sleep with the hallway light on. I’m 29.","I told my boss I was sick and went to the beach.","I miss my old friends but I’m too shy to text first.","I act confident, but I rehearse every call in the mirror."],li=0,ci=0,ty=$("#typed");
+function type(){
+ if(reduce){ty.textContent=lines[0];return}
+ var s=lines[li];
+ if(ci<=s.length){ty.textContent=s.slice(0,ci++);setTimeout(type,45)}
+ else{setTimeout(function(){ci=0;li=(li+1)%lines.length;type()},2200)}
+}
+type();
+
+/* marquee */
+var chips=["Anonymous confessions","Random chat rooms","Make new friends","Follow people","Real-time messaging","Create your own room","Ban unwanted users","Safe community"];
+["#t1","#t2"].forEach(function(id,k){var t=$(id),a=chips.slice();if(k)a.reverse();a.concat(a).forEach(function(c){t.append(el("span","chip",c))})});
+
+/* tilt */
+var st=$("#stage"),ph=$("#phone");
+if(!reduce&&matchMedia("(hover:hover)").matches){st.onmousemove=function(e){var r=st.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;ph.style.transform="rotateY("+x*14+"deg) rotateX("+-y*10+"deg)"};st.onmouseleave=function(){ph.style.transform=""}}
+
+/* phone demo */
+var screen=$("#screen");
+var confessions=[{t:"I still sleep with the hallway light on. I’m 29.",l:12},{t:"I told my boss I was sick and went to the beach. Zero regrets.",l:31},{t:"I miss my old school friends but I’m too shy to text first.",l:19}];
+var rooms=[{n:"Late night thoughts",c:42,m:[["Maya","Can’t sleep again. Anyone up?"],["Leo","Same. Brain won’t switch off."]]},{n:"Music talk",c:18,m:[["Sam","What’s on your playlist today?"]]},{n:"My room: Chill zone",c:5,own:1,m:[["Ari","Hey everyone!"],["Spammer99","BUY FOLLOWERS NOW"],["Noor","Welcome Ari :)"]]}];
+var people=[["Maya","Loves late-night chats"],["Leo","Shares funny confessions"],["Noor","New here, say hi"]];
+var followed={},banned={},tab="c",openRoom=null;
+function renderConfess(){
+ screen.replaceChildren();
+ var ta=el("textarea");ta.placeholder="What’s on your mind?";ta.maxLength=140;ta.setAttribute("aria-label","Your confession");
+ var b=el("button","pbtn","Post anonymously");
+ b.onclick=function(){var v=ta.value.trim();if(!v)return;confessions.unshift({t:v,l:0,n:1});renderConfess()};
+ screen.append(ta,b);
+ confessions.forEach(function(c){var d=el("div","slip"+(c.n?" new":""));d.append(el("small",null,c.n?"Anonymous · just now":"Anonymous"),el("div",null,c.t));
+  var h=el("button",null,"♥ "+c.l);h.onclick=function(){c.l++;h.textContent="♥ "+c.l};d.append(h);screen.append(d)});
+}
+function renderRooms(){
+ screen.replaceChildren();
+ if(openRoom===null){screen.append(el("p","note","Tap a room to join. The last one is yours."));
+  rooms.forEach(function(r,i){var b=el("button","room",r.n);b.append(el("span",null,r.c+" online"));b.onclick=function(){openRoom=i;renderRooms()};screen.append(b)});return}
+ var r=rooms[openRoom],back=el("button","back","‹ All rooms");back.onclick=function(){openRoom=null;renderRooms()};screen.append(back);
+ if(r.own)screen.append(el("p","note","You created this room, so you can ban users or delete it."));
+ var box=el("div");
+ r.m.forEach(function(m){if(banned[m[0]])return;var p=el("p","msg");p.append(el("b",null,m[0]+":"),el("span",null,m[1]));
+  if(r.own&&m[0]!=="You"){var k=el("button","kick","Ban");k.onclick=function(){banned[m[0]]=1;renderRooms()};p.append(k)}box.append(p)});
+ screen.append(box);
+ var bar=el("div","chatbar"),inp=el("input");inp.type="text";inp.placeholder="Message";inp.setAttribute("aria-label","Message");
+ var send=el("button","pbtn","Send");send.style.margin="0";
+ send.onclick=function(){var v=inp.value.trim();if(!v)return;r.m.push(["You",v]);if(!r.own)r.m.push([["Maya","Leo","Sam"][r.m.length%3],"Ha, same!"]);renderRooms()};
+ inp.onkeydown=function(e){if(e.key==="Enter")send.click()};bar.append(inp,send);screen.append(bar);
+ if(r.own){var del=el("button","back","Delete this room");del.style.marginTop="10px";del.onclick=function(){rooms.splice(openRoom,1);openRoom=null;renderRooms()};screen.append(del)}
+}
+function renderFriends(){
+ screen.replaceChildren();screen.append(el("p","note","People you might like"));
+ people.forEach(function(p){var d=el("div","who"),i=el("div");i.append(el("div",null,p[0]),el("small",null,p[1]));
+  var b=el("button",null,followed[p[0]]?"Following":"Follow");b.setAttribute("aria-pressed",!!followed[p[0]]);
+  b.onclick=function(){followed[p[0]]=!followed[p[0]];renderFriends()};d.append(i,b);screen.append(d)});
+}
+function show(){tab==="c"?renderConfess():tab==="r"?renderRooms():renderFriends()}
+document.querySelectorAll(".tabs button").forEach(function(b){b.onclick=function(){tab=b.dataset.t;document.querySelectorAll(".tabs button").forEach(function(x){x.setAttribute("aria-selected",x===b)});show()}});
+show();
+
+/* feature bento */
+var F=[["🤫","Anonymous confessions","Post without your name.","Share a thought anonymously. Others can read and react, so you find out you’re not the only one.",1],
+["🎲","Random public chat rooms","Jump in and talk.","Drop into open rooms and chat with whoever is there, any time of day.",0],
+["🫶","Make new friends","Chats turn into connections.","Find people you get along with outside your usual circle.",0],
+["➕","Follow other users","Keep up with favorites.","Follow people whose posts and chats you enjoy.",0],
+["⚡","Real-time messaging","Messages arrive instantly.","Conversations feel live, even in busy rooms.",1],
+["🛠️","Room creator controls","Run your own room.","Start a room and decide how it runs. Build a small community around any topic.",0],
+["🚫","Ban unwanted users","Keep the chat friendly.","Room creators can remove people who spoil the conversation.",0],
+["🗑️","Delete your own rooms","You stay in control.","Close a room you created whenever you want.",0],
+["✨","Fast, simple interface","Few taps to a chat.","Clean screens that get you talking right away.",0],
+["🛡️","Safe community","A welcoming space.","Moderation tools and a friendly focus help everyone feel comfortable sharing.",1]];
+F.forEach(function(f){var b=el("button","tile"+(f[4]?" w2":""));b.setAttribute("aria-expanded","false");
+ b.append(el("span","ic",f[0]),el("h3",null,f[1]),el("p",null,f[2]),el("p","more",f[3]));
+ b.onclick=function(){var o=b.getAttribute("aria-expanded")==="true";b.setAttribute("aria-expanded",!o)};$("#bento").append(b)});
+
+/* reveal */
+$("#who2").onclick=function(){this.replaceChildren(el("span","av","A"),el("span",null,"Anonymous. Nobody will ever know."));this.onclick=null};
+</script>
+</body>
+</html>
